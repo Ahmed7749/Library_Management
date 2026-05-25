@@ -44,6 +44,22 @@
             <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}" style="color: #d9534f; font-size: 13px; display: block; margin-top: 5px;"></span>
         </div>
 
+        <div>
+            <label for="author" style="display: block; margin-bottom: 5px; color: #555555; font-weight: bold;">Author ID:</label>
+            <select id="author" th:field="*{author}" style="width: 100%; padding: 10px; border: 1px solid #cccccc; border-radius: 5px; box-sizing: border-box; font-size: 14px; background-color: white;" required>
+                <option value="">-- Select Author --</option>
+                <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.authorName}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="category" style="display: block; margin-bottom: 5px; color: #555555; font-weight: bold;">Category ID:</label>
+            <select id="category" th:field="*{category}" style="width: 100%; padding: 10px; border: 1px solid #cccccc; border-radius: 5px; box-sizing: border-box; font-size: 14px; background-color: white;" required>
+                <option value="">-- Select Category --</option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+        </div>
+
         <div style="margin-top: 10px;">
             <button type="submit" style="width: 100%; background-color: #2196F3; color: white; border: none; padding: 12px; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
                 Save Book
@@ -52,7 +68,7 @@
     </form>
 
     <div style="text-align: center; margin-top: 20px;">
-        <a th:href="@{/books/display}" style="color: #666666; text-decoration: none; font-size: 14px;">← Back to Dashboard</a>
+        <a th:href="@{/books/home}" style="color: #666666; text-decoration: none; font-size: 14px;">← Back to Dashboard</a>
     </div>
 
 </div>
