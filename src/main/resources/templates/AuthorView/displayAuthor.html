@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Authors List</title>
+</head>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px;">
+
+<div style="max-width: 800px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+
+    <h2 style="text-align: center; color: #333333; margin-bottom: 20px;">Library Authors Directory</h2>
+
+    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <thead>
+        <tr style="background-color: #4CAF50; color: white; text-align: left;">
+            <th style="padding: 14px; border: 1px solid #dddddd;">Author ID</th>
+            <th style="padding: 14px; border: 1px solid #dddddd;">Name</th>
+            <th style="padding: 14px; border: 1px solid #dddddd;">Nationality</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="author : ${authorList}" style="background-color: #fcfcfc; border-bottom: 1px solid #dddddd;">
+            <td style="padding: 12px; border: 1px solid #dddddd; color: #555555;" th:text="${author.id}">1</td>
+            <td style="padding: 12px; border: 1px solid #dddddd; color: #555555;" th:text="${author.authorName}">John</td>
+            <td style="padding: 12px; border: 1px solid #dddddd; color: #555555;" th:text="${author.nationality}">Doe</td>
+        </tr>
+
+        <tr th:if="${#lists.isEmpty(authorList)}">
+            <td colspan="3" style="padding: 20px; text-align: center; color: #999999; font-style: italic; border: 1px solid #dddddd;">
+                No authors currently found in the database.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
