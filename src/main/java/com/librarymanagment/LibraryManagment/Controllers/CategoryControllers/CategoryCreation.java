@@ -3,6 +3,7 @@ package com.librarymanagment.LibraryManagment.Controllers.CategoryControllers;
 
 import com.librarymanagment.LibraryManagment.Entities.Category;
 import com.librarymanagment.LibraryManagment.Repostries.CategoryRepository;
+import com.librarymanagment.LibraryManagment.Services.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CategoryCreation {
 
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    public CategoryCreation(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryCreation(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @GetMapping("create")
@@ -34,7 +35,7 @@ public class CategoryCreation {
         if(result.hasErrors()){
             return "redirect:/categories/create";
         }
-        categoryRepository.save(category);
+        categoryService.saveCategory(category);
         return "redirect:/categories/create";
     }
 }
