@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories List</title>
+</head>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px;">
+
+<div style="max-width: 800px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="color: #333333; margin: 0;">Library Categories</h2>
+        <a th:href="@{/categories/create}" style="background-color: #2196F3; color: white; text-decoration: none; padding: 10px 15px; border-radius: 5px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+            ➕ Add New Category
+        </a>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <thead>
+        <tr style="background-color: #4CAF50; color: white; text-align: left;">
+            <th style="padding: 14px; border: 1px solid #dddddd; width: 20%;">Category ID</th>
+            <th style="padding: 14px; border: 1px solid #dddddd; width: 80%;">Category Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cat : ${categoryList}" style="background-color: #fcfcfc; border-bottom: 1px solid #dddddd;">
+            <td style="padding: 12px; border: 1px solid #dddddd; color: #555555;" th:text="${cat.id}">1</td>
+            <td style="padding: 12px; border: 1px solid #dddddd; color: #333333; font-weight: bold;" th:text="${cat.name}">Science Fiction</td>
+        </tr>
+
+        <tr th:if="${#lists.isEmpty(categoryList)}">
+            <td colspan="2" style="padding: 20px; text-align: center; color: #999999; font-style: italic; border: 1px solid #dddddd;">
+                No categories currently found in the database.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 20px;">
+        <a th:href="@{/categories/home}" style="color: #666666; text-decoration: none; font-size: 14px;">← Back to Category Dashboard</a>
+    </div>
+
+</div>
+
+</body>
+</html>
