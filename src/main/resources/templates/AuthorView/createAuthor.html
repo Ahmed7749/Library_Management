@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Author</title>
+</head>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px; display: flex; justify-content: center;">
+
+<div style="background-color: #ffffff; padding: 30px 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px;">
+
+    <h2 style="color: #333333; margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">
+        Add a New Author
+    </h2>
+
+    <form th:action="@{/authors/create}" th:object="${author}" method="post" style="display: flex; flex-direction: column; gap: 15px;">
+
+        <div style="display: flex; flex-direction: column;">
+            <label for="name" style="font-weight: bold; margin-bottom: 5px; color: #555555;">Author Name:</label>
+            <input type="text" id="name" th:field="*{authorName}" placeholder="Enter author name" required
+                   style="padding: 10px; border: 1px solid #cccccc; border-radius: 4px; font-size: 16px; outline: none;"
+                   onfocus="this.style.borderColor='#007bff'" onblur="this.style.borderColor='#cccccc'" />
+            <label for="nationality" style="font-weight: bold; margin-bottom: 5px; color: #555555;">Author Name:</label>
+            <input type="text" id="nationality" th:field="*{nationality}" placeholder="Enter author name" required
+                   style="padding: 10px; border: 1px solid #cccccc; border-radius: 4px; font-size: 16px; outline: none;"
+                   onfocus="this.style.borderColor='#007bff'" onblur="this.style.borderColor='#cccccc'" />
+        </div>
+
+        <div style="margin-top: 10px;">
+            <button type="submit"
+                    style="width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.3s;"
+                    onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">
+                Save Author
+            </button>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>
