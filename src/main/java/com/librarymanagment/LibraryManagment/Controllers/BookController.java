@@ -1,4 +1,4 @@
-package com.librarymanagment.LibraryManagment.Controllers.BookControllers;
+package com.librarymanagment.LibraryManagment.Controllers;
 
 import com.librarymanagment.LibraryManagment.Entities.Book;
 import com.librarymanagment.LibraryManagment.Services.AuthorService;
