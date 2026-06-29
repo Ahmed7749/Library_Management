@@ -1,4 +1,4 @@
-package com.librarymanagment.LibraryManagment.Controllers.CategoryControllers;
+package com.librarymanagment.LibraryManagment.Controllers;
 
 import com.librarymanagment.LibraryManagment.Entities.Category;
 import com.librarymanagment.LibraryManagment.Services.CategoryService;
