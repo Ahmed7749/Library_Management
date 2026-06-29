@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8080
