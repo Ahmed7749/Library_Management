@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.librarymanagment.LibraryManagment.Entities.Author;
 import com.librarymanagment.LibraryManagment.Services.AuthorService;
+import com.librarymanagment.LibraryManagment.dto.AuthorDTO;
 import com.librarymanagment.LibraryManagment.exception.JsonPatchProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -38,15 +39,17 @@ public class AuthorController {
 
 
     @PostMapping
-    public ResponseEntity<Author> addAuthor(@Valid @RequestBody Author author){
-        Author savedAuthor = authorService.saveAuthor(author);
+    public ResponseEntity<Author> addAuthor(@Valid @RequestBody AuthorDTO dto){
+        Author savedAuthor = authorService.saveAuthor(dto);
         return new ResponseEntity<>(savedAuthor, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Author> putAuthor(@PathVariable long id, @Valid @RequestBody Author author){
-        author.setId(id);
-        return new ResponseEntity<>(authorService.saveAuthor(author), HttpStatus.CREATED);
+    public ResponseEntity<Author> putAuthor(@PathVariable long id, @Valid @RequestBody AuthorDTO requestDTO){
+        Author existing = authorService.findById(id);
+        existing.setAuthorName(requestDTO.authorName());
+        existing.setNationality(requestDTO.nationality());
+        return new ResponseEntity<>(authorService.saveAuthor(existing), HttpStatus.OK);
     }
 
 
@@ -63,21 +66,21 @@ public class AuthorController {
         Author targetAuthor = authorService.findById(id);
 
 
-        Author patchedAuthor = applyPatchToAuthor(patchBody, targetAuthor);
+        AuthorDTO patchedAuthor = applyPatchToAuthor(patchBody, authorService.castTOAuthorDTO(targetAuthor));
 
 
         return ResponseEntity.ok(authorService.saveAuthor(patchedAuthor));
     }
 
 
-    private Author applyPatchToAuthor(String patchBody, Author targetAuthor) {
+    private AuthorDTO applyPatchToAuthor(String patchBody, AuthorDTO targetAuthor) {
         try {
             JsonNode patchNode = objectMapper.readTree(patchBody);
             JsonNode targetNode = objectMapper.convertValue(targetAuthor, JsonNode.class);
 
             JsonNode patchedNode = JsonPatch.apply(patchNode, targetNode);
 
-            return objectMapper.treeToValue(patchedNode, Author.class);
+            return objectMapper.treeToValue(patchedNode, AuthorDTO.class);
         } catch (JsonProcessingException e) {
             throw new JsonPatchProcessingException("Invalid patch format: " + e.getMessage());
         }
