@@ -2,6 +2,7 @@ package com.librarymanagment.LibraryManagment.Services;
 
 import com.librarymanagment.LibraryManagment.Entities.Author;
 import com.librarymanagment.LibraryManagment.Repostries.AuthorRepository;
+import com.librarymanagment.LibraryManagment.dto.AuthorDTO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,18 @@ public class AuthorService {
     }
 
     @Transactional
+    public Author saveAuthor(AuthorDTO author){
+        Author createdAuthor = new Author();
+
+        createdAuthor.setAuthorName(author.authorName());
+        createdAuthor.setNationality(author.nationality());
+        return authorRepository.save(createdAuthor);
+    }
+
+    @Transactional
     public Author saveAuthor(Author author){
         return authorRepository.save(author);
     }
-
 
 
     public List<Author> findAll(){
@@ -46,5 +55,10 @@ public class AuthorService {
         if(rowsAffected == 0) {
             throw new EntityNotFoundException("Author not found");
         }
+    }
+
+
+    public AuthorDTO castTOAuthorDTO(Author author){
+        return new AuthorDTO(author.getAuthorName(), author.getNationality());
     }
 }
