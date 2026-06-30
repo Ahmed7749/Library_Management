@@ -2,7 +2,9 @@ package com.librarymanagment.LibraryManagment.Services;
 
 import com.librarymanagment.LibraryManagment.Entities.Category;
 import com.librarymanagment.LibraryManagment.Repostries.CategoryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,7 +22,22 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public void saveCategory(Category category){
-        categoryRepository.save(category);
+
+    @Transactional
+    public Category saveCategory(Category category){
+        return categoryRepository.save(category);
+    }
+
+
+    public Category getCategoryById(long id){
+        return categoryRepository.getCategoryById(id).orElseThrow(() -> new EntityNotFoundException("Category not found"));
+    }
+
+    @Transactional
+    public void deleteCategory(long id){
+        int rowsAffected = categoryRepository.deleteCategoryById(id);
+        if(rowsAffected == 0){
+            throw new EntityNotFoundException("Category not found - deletion failed");
+        }
     }
 }
