@@ -2,7 +2,8 @@ package com.librarymanagment.LibraryManagment.Services;
 
 import com.librarymanagment.LibraryManagment.Entities.Category;
 import com.librarymanagment.LibraryManagment.Repostries.CategoryRepository;
-import com.librarymanagment.LibraryManagment.dto.CategoryDTO;
+import com.librarymanagment.LibraryManagment.dto.Request.CategoryRequestDTO;
+import com.librarymanagment.LibraryManagment.dto.Response.CategoryResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class CategoryService {
 
 
     @Transactional
-    public Category saveCategory(CategoryDTO category){
+    public Category saveCategory(CategoryRequestDTO category){
         Category createdCategory = new Category();
         createdCategory.setName(category.name());
         return categoryRepository.save(createdCategory);
@@ -50,7 +51,11 @@ public class CategoryService {
     }
 
 
-    public CategoryDTO castToCategoryDTO(Category category){
-        return new CategoryDTO(category.getName());
+    public CategoryRequestDTO castToCategoryRequestDTO(Category category){
+        return new CategoryRequestDTO(category.getName());
+    }
+
+    public CategoryResponseDTO castToCategoryResponseDTO(Category category){
+        return new CategoryResponseDTO(category.getId(), category.getName());
     }
 }
