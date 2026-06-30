@@ -4,17 +4,20 @@ import com.librarymanagment.LibraryManagment.Entities.Book;
 import com.librarymanagment.LibraryManagment.Services.AuthorService;
 import com.librarymanagment.LibraryManagment.Services.BookService;
 import com.librarymanagment.LibraryManagment.Services.CategoryService;
+import com.librarymanagment.LibraryManagment.dto.BookAuthorDTO;
+import com.librarymanagment.LibraryManagment.dto.BookRequestDTO;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("books")
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/books")
 public class BookController {
     private final AuthorService authorService;
     private final CategoryService categoryService;
@@ -25,34 +28,27 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping("create")
-    public String bookPage(Model model){
-        model.addAttribute("book", new Book());
-        model.addAttribute("authors", authorService.getAllAuthors());
-        model.addAttribute("categories", categoryService.getAllCategories());
-        return "BookView/bookCreation";
-    }
 
-    @GetMapping("display")
-    public String generateList(Model model){
-        model.addAttribute("booksList", bookService.getAllBooks());
-        return "BookView/displayBook";
-    }
-
-    @GetMapping("home")
-    public String displayHomePage(){
-        return "BookView/bookHomePage";
+    @GetMapping
+    public List<Book> getBooks(){
+        return bookService.getAllBooks();
     }
 
 
-    @PostMapping("create")
-    public String bookCreation(@ModelAttribute("book") @Valid Book book, BindingResult result, Model model){
-        if(result.hasErrors()){
-            model.addAttribute("authors", authorService.getAllAuthors());
-            model.addAttribute("categories", categoryService.getAllCategories());
-            return "BookView/bookCreation";
-        }
-        bookService.saveBook(book);
-        return "redirect:/books/create";
+    @GetMapping("/{id}")
+    public Book getBookById(@PathVariable long id){
+        return bookService.getBookById(id);
+    }
+
+    @GetMapping("/authors/{authorId}")
+    public List<BookAuthorDTO> getBooksForAuthor(@PathVariable long authorId){
+        return bookService.getBooksForAuthor(authorId);
+    }
+
+
+    @PostMapping
+    public ResponseEntity<Book> addBook(@Valid @RequestBody BookRequestDTO book){
+        Book createdBook = bookService.createBook(book);
+        return new ResponseEntity<>(bookService.saveBook(createdBook), HttpStatus.CREATED);
     }
 }
