@@ -1,4 +1,4 @@
-package com.librarymanagment.LibraryManagment.dto;
+package com.librarymanagment.LibraryManagment.dto.Response;
 
 
 public class HttpDTO {
