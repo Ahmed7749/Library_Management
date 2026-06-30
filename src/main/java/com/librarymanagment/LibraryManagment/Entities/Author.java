@@ -16,7 +16,7 @@ public class Author {
     @NotBlank(message = "please enter author name")
     private String authorName;
     @NotBlank(message = "please select nationality")
-    @Pattern(regexp = "^[a-zA-Z\s]+$", message = "Nationality cannot have numbers.")
+    @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Nationality cannot have numbers.")
     private String nationality;
 
     public Author() {
