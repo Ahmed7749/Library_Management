@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flipkart.zjsonpatch.JsonPatch;
 import com.librarymanagment.LibraryManagment.Entities.Category;
 import com.librarymanagment.LibraryManagment.Services.CategoryService;
+import com.librarymanagment.LibraryManagment.dto.CategoryDTO;
 import com.librarymanagment.LibraryManagment.exception.JsonPatchProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -37,20 +38,21 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable long id){
-        return new ResponseEntity<>(categoryService.getCategoryById(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(categoryService.getCategoryById(id), HttpStatus.OK);
     }
 
 
     @PostMapping
-    public ResponseEntity<Category> saveCategory(@RequestBody Category category){
+    public ResponseEntity<Category> saveCategory(@Valid @RequestBody CategoryDTO category){
         return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.CREATED);
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable long id, @Valid @RequestBody Category category){
+    public ResponseEntity<Category> updateCategory(@PathVariable long id, @Valid @RequestBody CategoryDTO requestDTO){
+        Category category = categoryService.saveCategory(requestDTO);
         category.setId(id);
-        return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.CREATED);
+        return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
 
@@ -65,7 +67,7 @@ public class CategoryController {
     public ResponseEntity<Category> patchCategory(@PathVariable long id, @RequestBody String patch){
         Category category = categoryService.getCategoryById(id);
 
-        return new ResponseEntity<>(applyPatching(category, patch), HttpStatus.CREATED);
+        return new ResponseEntity<>(categoryService.saveCategory(applyPatching(category, patch)), HttpStatus.OK);
     }
 
     private Category applyPatching(Category target, String patch){
