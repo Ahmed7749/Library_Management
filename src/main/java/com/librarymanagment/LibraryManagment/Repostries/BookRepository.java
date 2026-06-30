@@ -1,8 +1,7 @@
 package com.librarymanagment.LibraryManagment.Repostries;
 
-import com.librarymanagment.LibraryManagment.Entities.Author;
 import com.librarymanagment.LibraryManagment.Entities.Book;
-import com.librarymanagment.LibraryManagment.dto.BookAuthorDTO;
+import com.librarymanagment.LibraryManagment.dto.Response.BookAuthorDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
