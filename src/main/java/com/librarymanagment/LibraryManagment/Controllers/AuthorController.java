@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.librarymanagment.LibraryManagment.Entities.Author;
 import com.librarymanagment.LibraryManagment.Services.AuthorService;
 import com.librarymanagment.LibraryManagment.exception.JsonPatchProcessingException;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,13 +38,13 @@ public class AuthorController {
 
 
     @PostMapping
-    public ResponseEntity<Author> addAuthor(@RequestBody Author author){
+    public ResponseEntity<Author> addAuthor(@Valid @RequestBody Author author){
         Author savedAuthor = authorService.saveAuthor(author);
         return new ResponseEntity<>(savedAuthor, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Author> putAuthor(@PathVariable long id, @RequestBody Author author){
+    public ResponseEntity<Author> putAuthor(@PathVariable long id, @Valid @RequestBody Author author){
         author.setId(id);
         return new ResponseEntity<>(authorService.saveAuthor(author), HttpStatus.CREATED);
     }
@@ -58,30 +59,24 @@ public class AuthorController {
 
     @PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
     public ResponseEntity<Author> patchAuthor(@PathVariable long id, @RequestBody String patchBody) {
-        // 1. Fetch
+
         Author targetAuthor = authorService.findById(id);
 
-        // 2. Delegate everything to the helper
+
         Author patchedAuthor = applyPatchToAuthor(patchBody, targetAuthor);
 
-        // 3. Save & Return
+
         return ResponseEntity.ok(authorService.saveAuthor(patchedAuthor));
     }
 
 
     private Author applyPatchToAuthor(String patchBody, Author targetAuthor) {
         try {
-            // 1. Convert the raw JSON string (the array) to a JsonNode
             JsonNode patchNode = objectMapper.readTree(patchBody);
-
-            // 2. Convert the Author entity to a JsonNode
             JsonNode targetNode = objectMapper.convertValue(targetAuthor, JsonNode.class);
 
-            // 3. Apply the patch
-            // Crucial: The library needs to know it's applying a list of operations
             JsonNode patchedNode = JsonPatch.apply(patchNode, targetNode);
 
-            // 4. Convert back
             return objectMapper.treeToValue(patchedNode, Author.class);
         } catch (JsonProcessingException e) {
             throw new JsonPatchProcessingException("Invalid patch format: " + e.getMessage());
