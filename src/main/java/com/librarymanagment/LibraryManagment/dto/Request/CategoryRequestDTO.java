@@ -1,9 +1,8 @@
-package com.librarymanagment.LibraryManagment.dto;
+package com.librarymanagment.LibraryManagment.dto.Request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-public record CategoryDTO(
+public record CategoryRequestDTO(
                           @NotBlank
                           String name) {
 }
