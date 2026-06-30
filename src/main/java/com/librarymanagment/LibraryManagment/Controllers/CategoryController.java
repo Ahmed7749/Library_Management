@@ -6,14 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flipkart.zjsonpatch.JsonPatch;
 import com.librarymanagment.LibraryManagment.Entities.Category;
 import com.librarymanagment.LibraryManagment.Services.CategoryService;
-import com.librarymanagment.LibraryManagment.dto.CategoryDTO;
+import com.librarymanagment.LibraryManagment.dto.Request.CategoryRequestDTO;
+import com.librarymanagment.LibraryManagment.dto.Response.CategoryResponseDTO;
 import com.librarymanagment.LibraryManagment.exception.JsonPatchProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,28 +29,31 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> getCategoryList(){
-        return categoryService.getAllCategories();
+    public List<CategoryResponseDTO> getCategoryList(){
+        return categoryService.getAllCategories()
+                .stream()
+                .map(categoryService::castToCategoryResponseDTO)
+                .toList();
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable long id){
-        return new ResponseEntity<>(categoryService.getCategoryById(id), HttpStatus.OK);
+    public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable long id){
+        return new ResponseEntity<>(categoryService.castToCategoryResponseDTO(categoryService.getCategoryById(id)), HttpStatus.OK);
     }
 
 
     @PostMapping
-    public ResponseEntity<Category> saveCategory(@Valid @RequestBody CategoryDTO category){
-        return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.CREATED);
+    public ResponseEntity<CategoryResponseDTO> saveCategory(@Valid @RequestBody CategoryRequestDTO category){
+        return new ResponseEntity<>(categoryService.castToCategoryResponseDTO(categoryService.saveCategory(category)), HttpStatus.CREATED);
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable long id, @Valid @RequestBody CategoryDTO requestDTO){
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable long id, @Valid @RequestBody CategoryRequestDTO requestDTO){
         Category category = categoryService.saveCategory(requestDTO);
         category.setId(id);
-        return new ResponseEntity<>(category, HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.castToCategoryResponseDTO(category), HttpStatus.OK);
     }
 
 
@@ -64,10 +65,10 @@ public class CategoryController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Category> patchCategory(@PathVariable long id, @RequestBody String patch){
+    public ResponseEntity<CategoryResponseDTO> patchCategory(@PathVariable long id, @RequestBody String patch){
         Category category = categoryService.getCategoryById(id);
 
-        return new ResponseEntity<>(categoryService.saveCategory(applyPatching(category, patch)), HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.castToCategoryResponseDTO(categoryService.saveCategory(applyPatching(category, patch))), HttpStatus.OK);
     }
 
     private Category applyPatching(Category target, String patch){
