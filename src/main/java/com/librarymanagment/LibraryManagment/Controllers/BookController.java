@@ -4,14 +4,12 @@ import com.librarymanagment.LibraryManagment.Entities.Book;
 import com.librarymanagment.LibraryManagment.Services.AuthorService;
 import com.librarymanagment.LibraryManagment.Services.BookService;
 import com.librarymanagment.LibraryManagment.Services.CategoryService;
-import com.librarymanagment.LibraryManagment.dto.BookAuthorDTO;
-import com.librarymanagment.LibraryManagment.dto.BookRequestDTO;
+import com.librarymanagment.LibraryManagment.dto.Response.BookAuthorDTO;
+import com.librarymanagment.LibraryManagment.dto.Request.BookRequestDTO;
+import com.librarymanagment.LibraryManagment.dto.Response.BookResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +28,18 @@ public class BookController {
 
 
     @GetMapping
-    public List<Book> getBooks(){
-        return bookService.getAllBooks();
+    public List<BookResponseDTO> getBooks(){
+        return bookService.getAllBooks()
+                .stream()
+                .map(bookService::castToBookResponseDTO)
+                .toList();
     }
 
 
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable long id){
-        return bookService.getBookById(id);
+    public ResponseEntity<BookResponseDTO> getBookById(@PathVariable long id){
+        BookResponseDTO responseDTO = bookService.castToBookResponseDTO(bookService.getBookById(id));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/authors/{authorId}")
@@ -47,8 +49,9 @@ public class BookController {
 
 
     @PostMapping
-    public ResponseEntity<Book> addBook(@Valid @RequestBody BookRequestDTO book){
+    public ResponseEntity<BookResponseDTO> addBook(@Valid @RequestBody BookRequestDTO book){
         Book createdBook = bookService.createBook(book);
-        return new ResponseEntity<>(bookService.saveBook(createdBook), HttpStatus.CREATED);
+        BookResponseDTO responseDTO = bookService.castToBookResponseDTO(createdBook);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 }
