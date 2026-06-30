@@ -1,4 +1,4 @@
-package com.librarymanagment.LibraryManagment.dto;
+package com.librarymanagment.LibraryManagment.dto.Request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
