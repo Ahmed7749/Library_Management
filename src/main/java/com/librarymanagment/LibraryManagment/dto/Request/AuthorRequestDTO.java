@@ -1,8 +1,8 @@
-package com.librarymanagment.LibraryManagment.dto;
+package com.librarymanagment.LibraryManagment.dto.Request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record AuthorDTO(
+public record AuthorRequestDTO(
                         @NotBlank(message = "please enter author name")
                          String authorName,
                         @NotBlank(message = "please select nationality")
