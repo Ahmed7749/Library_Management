@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class Author {
@@ -15,6 +16,7 @@ public class Author {
     @NotBlank(message = "please enter author name")
     private String authorName;
     @NotBlank(message = "please select nationality")
+    @Pattern(regexp = "^[a-zA-Z\s]+$", message = "Nationality cannot have numbers.")
     private String nationality;
 
     public Author() {
