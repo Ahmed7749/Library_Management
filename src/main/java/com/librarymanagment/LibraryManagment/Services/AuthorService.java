@@ -2,9 +2,9 @@ package com.librarymanagment.LibraryManagment.Services;
 
 import com.librarymanagment.LibraryManagment.Entities.Author;
 import com.librarymanagment.LibraryManagment.Repostries.AuthorRepository;
-import com.librarymanagment.LibraryManagment.dto.AuthorDTO;
+import com.librarymanagment.LibraryManagment.dto.Request.AuthorRequestDTO;
+import com.librarymanagment.LibraryManagment.dto.Response.AuthorResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +25,7 @@ public class AuthorService {
     }
 
     @Transactional
-    public Author saveAuthor(AuthorDTO author){
+    public Author saveAuthor(AuthorRequestDTO author){
         Author createdAuthor = new Author();
 
         createdAuthor.setAuthorName(author.authorName());
@@ -58,7 +58,11 @@ public class AuthorService {
     }
 
 
-    public AuthorDTO castTOAuthorDTO(Author author){
-        return new AuthorDTO(author.getAuthorName(), author.getNationality());
+    public AuthorRequestDTO castToAuthorRequestDTO(Author author){
+        return new AuthorRequestDTO(author.getAuthorName(), author.getNationality());
+    }
+
+    public AuthorResponseDTO castToAuthorResponseDTO(Author author){
+        return new AuthorResponseDTO(author.getId(), author.getAuthorName(), author.getNationality());
     }
 }
