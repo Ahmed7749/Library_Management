@@ -2,6 +2,7 @@ package com.librarymanagment.LibraryManagment.Services;
 
 import com.librarymanagment.LibraryManagment.Entities.Category;
 import com.librarymanagment.LibraryManagment.Repostries.CategoryRepository;
+import com.librarymanagment.LibraryManagment.dto.CategoryDTO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,13 @@ public class CategoryService {
 
 
     @Transactional
+    public Category saveCategory(CategoryDTO category){
+        Category createdCategory = new Category();
+        createdCategory.setName(category.name());
+        return categoryRepository.save(createdCategory);
+    }
+
+    @Transactional
     public Category saveCategory(Category category){
         return categoryRepository.save(category);
     }
@@ -39,5 +47,10 @@ public class CategoryService {
         if(rowsAffected == 0){
             throw new EntityNotFoundException("Category not found - deletion failed");
         }
+    }
+
+
+    public CategoryDTO castToCategoryDTO(Category category){
+        return new CategoryDTO(category.getName());
     }
 }
