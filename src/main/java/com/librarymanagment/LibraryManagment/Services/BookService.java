@@ -4,10 +4,10 @@ import com.librarymanagment.LibraryManagment.Entities.Author;
 import com.librarymanagment.LibraryManagment.Entities.Book;
 import com.librarymanagment.LibraryManagment.Entities.Category;
 import com.librarymanagment.LibraryManagment.Repostries.BookRepository;
-import com.librarymanagment.LibraryManagment.dto.BookAuthorDTO;
-import com.librarymanagment.LibraryManagment.dto.BookRequestDTO;
+import com.librarymanagment.LibraryManagment.dto.Response.BookAuthorDTO;
+import com.librarymanagment.LibraryManagment.dto.Request.BookRequestDTO;
+import com.librarymanagment.LibraryManagment.dto.Response.BookResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,5 +61,19 @@ public class BookService {
         newBook.setCategory(category);
 
         return bookRepository.save(newBook);
+    }
+
+
+    public BookResponseDTO castToBookResponseDTO(Book book) {
+        return new BookResponseDTO(
+                book.getId(),
+                book.getTitle(),
+                book.getIsbn(),
+                book.getPageCount(),
+                book.getStatus(),
+                book.getAddedDate(),
+                book.getAuthor().getAuthorName(),
+                book.getCategory().getName()
+        );
     }
 }
