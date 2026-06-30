@@ -1,6 +1,6 @@
 package com.librarymanagment.LibraryManagment.exception;
 
-import com.librarymanagment.LibraryManagment.dto.HttpDTO;
+import com.librarymanagment.LibraryManagment.dto.Response.HttpDTO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
